@@ -1,0 +1,2330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Revenge: The Run - MCR Edition</title>
+    <!-- Tailwind CSS para estruturação de UI rápida e limpa -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts para estilo gótico e punk moderno -->
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=New+Rocker&family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones de controle -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0c10;
+            color: #f1f1f1;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .font-mcr-gothic {
+            font-family: 'New Rocker', cursive;
+        }
+        .font-mcr-title {
+            font-family: 'Creepster', cursive;
+        }
+        /* Custom scrollbar para listas de pontuação */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e50914;
+            border-radius: 3px;
+        }
+        /* Efeito de glitch para a identidade visual de Danger Days e Cyberpunk MCR */
+        .glitch-text {
+            position: relative;
+            animation: glitch 3s infinite;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 2px 2px #ff007f, -2px -2px #00f0ff; }
+            50% { text-shadow: -2px 2px #ff007f, 2px -2px #00f0ff; }
+            100% { text-shadow: 2px -2px #ff007f, -2px 2px #00f0ff; }
+        }
+        /* Pulse anim */
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.03); opacity: 1; }
+        }
+        .pulse-btn {
+            animation: pulse-soft 2s infinite ease-in-out;
+        }
+        /* Efeito de balanço das caveiras fofinhas na UI */
+        .skull-float {
+            animation: float 2.5s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(5deg); }
+        }
+        /* Transição suave de telas */
+        .screen-fade {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="w-screen h-screen flex items-center justify-center p-0 md:p-4">
+
+    <!-- Container Principal do Jogo (Mantém proporção para experiência de console/mobile confortável) -->
+    <div id="game-container" class="relative w-full h-full max-w-5xl max-h-[640px] bg-black rounded-none md:rounded-2xl border-0 md:border-4 border-zinc-800 shadow-[0_0_50px_rgba(229,9,20,0.25)] overflow-hidden flex flex-col justify-between">
+        
+        <!-- ========================================================= -->
+        <!-- TELA 1: INTRO / MENU INICIAL                              -->
+        <!-- ========================================================= -->
+        <div id="menu-screen" class="screen-fade absolute inset-0 z-30 flex flex-col justify-between p-6 bg-gradient-to-b from-neutral-900 via-zinc-950 to-black overflow-y-auto">
+            <!-- Header com logo e redes sociais fake/estilo -->
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    
+                </div>
+                <!-- Controle de Áudio Global -->
+                <button id="global-mute-btn" class="w-10 h-10 rounded-full bg-zinc-800 hover:bg-zinc-700 flex items-center justify-center text-zinc-300 transition-all border border-zinc-700">
+                    <i class="fas fa-volume-up" id="mute-icon"></i>
+                </button>
+            </div>
+
+            <!-- Centro: Logo Triunfante com Efeito Gótico -->
+            <div class="text-center my-auto py-4">
+                <h1 class="font-mcr-title text-5xl md:text-7xl text-red-600 tracking-wider glitch-text drop-shadow-[0_5px_15px_rgba(229,9,20,0.5)]">
+                    Sweet Revenge
+                </h1>
+                <p class="font-mcr-gothic text-xl md:text-2xl text-zinc-300 tracking-widest mt-2">The MCR Runner Game</p>
+                
+                <!-- O Famoso "G-Note" Interativo -->
+                <div class="mt-6">
+                    <button id="g-note-btn" class="px-6 py-2 bg-zinc-900 hover:bg-red-950/40 border border-zinc-700 text-red-500 text-xs rounded-full uppercase tracking-widest transition-all duration-300 hover:scale-105 inline-flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping"></span>
+                        Tocar o Lendário "G-Note" (Piano)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Botão de Start e Guia Rápido -->
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between border-t border-zinc-800 pt-6">
+                <div class="text-center md:text-left">
+                    <p class="text-xs text-zinc-500"><i class="fas fa-keyboard mr-1"></i> Controles: <strong class="text-zinc-300">Espaço</strong> para Saltar e <strong class="text-zinc-300">Seta Baixo</strong> para Abaixar.</p>
+                </div>
+                <button id="start-game-btn" class="pulse-btn w-full md:w-auto px-12 py-4 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-mcr-gothic tracking-widest text-2xl rounded-xl shadow-[0_4px_20px_rgba(229,9,20,0.4)] transition-all">
+                    INICIAR CORRIDA
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- TELA 2: SELEÇÃO DE INTEGRANTE E FASE                     -->
+        <!-- ========================================================= -->
+        <div id="selection-screen" class="screen-fade absolute inset-0 z-20 hidden flex-col justify-between p-4 md:p-6 bg-zinc-950 overflow-y-auto">
+            <!-- Topo com botão Voltar -->
+            <div class="flex justify-between items-center mb-4">
+                <button id="back-to-menu-btn" class="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs uppercase tracking-wider text-zinc-400 flex items-center gap-1">
+                    <i class="fas fa-chevron-left text-[10px]"></i> Voltar
+                </button>
+                <div class="w-16"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto">
+                <!-- Seção de Personagem -->
+                <div class="lg:col-span-7 flex flex-col justify-between">
+                    <h4 class="text-xs tracking-widest uppercase font-bold text-zinc-400 mb-2 flex items-center gap-2">
+                        <i class="fas fa-user-ninja text-red-500"></i> Selecione seu Integrante
+                    </h4>
+                    
+                    <!-- Grid de Escolha -->
+                    <div id="char-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <!-- Gerard Way -->
+                        <div data-char="gerard" class="char-card cursor-pointer border-2 border-zinc-800 hover:border-red-600/50 bg-zinc-900 rounded-xl p-3 flex flex-col items-center justify-between text-center transition-all select-none">
+                            <div class="w-14 h-14 rounded-full bg-red-950/50 border border-red-500 flex items-center justify-center mb-2 overflow-hidden relative">
+                                <canvas class="char-mini-preview w-full h-full" id="canvas-preview-gerard"></canvas>
+                            </div>
+                            <span class="font-bold text-sm tracking-wide text-white">Gerard Way</span>
+                            <span class="text-[9px] uppercase px-1.5 py-0.5 bg-red-950 text-red-400 border border-red-900/50 rounded-full mt-1">Escudo</span>
+                        </div>
+                        <!-- Ray Toro -->
+                        <div data-char="ray" class="char-card cursor-pointer border-2 border-zinc-800 hover:border-amber-600/50 bg-zinc-900 rounded-xl p-3 flex flex-col items-center justify-between text-center transition-all select-none">
+                            <div class="w-14 h-14 rounded-full bg-amber-950/50 border border-amber-500 flex items-center justify-center mb-2 overflow-hidden relative">
+                                <canvas class="char-mini-preview w-full h-full" id="canvas-preview-ray"></canvas>
+                            </div>
+                            <span class="font-bold text-sm tracking-wide text-white">Ray Toro</span>
+                            <span class="text-[9px] uppercase px-1.5 py-0.5 bg-amber-950 text-amber-400 border border-amber-900/50 rounded-full mt-1">Imã</span>
+                        </div>
+                        <!-- Frank Iero -->
+                        <div data-char="frank" class="char-card cursor-pointer border-2 border-zinc-800 hover:border-emerald-600/50 bg-zinc-900 rounded-xl p-3 flex flex-col items-center justify-between text-center transition-all select-none">
+                            <div class="w-14 h-14 rounded-full bg-emerald-950/50 border border-emerald-500 flex items-center justify-center mb-2 overflow-hidden relative">
+                                <canvas class="char-mini-preview w-full h-full" id="canvas-preview-frank"></canvas>
+                            </div>
+                            <span class="font-bold text-sm tracking-wide text-white">Frank Iero</span>
+                            <span class="text-[9px] uppercase px-1.5 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-900/50 rounded-full mt-1">Dash</span>
+                        </div>
+                        <!-- Mikey Way -->
+                        <div data-char="mikey" class="char-card cursor-pointer border-2 border-zinc-800 hover:border-blue-600/50 bg-zinc-900 rounded-xl p-3 flex flex-col items-center justify-between text-center transition-all select-none">
+                            <div class="w-14 h-14 rounded-full bg-blue-950/50 border border-blue-500 flex items-center justify-center mb-2 overflow-hidden relative">
+                                <canvas class="char-mini-preview w-full h-full" id="canvas-preview-mikey"></canvas>
+                            </div>
+                            <span class="font-bold text-sm tracking-wide text-white">Mikey Way</span>
+                            <span class="text-[9px] uppercase px-1.5 py-0.5 bg-blue-950 text-blue-400 border border-blue-900/50 rounded-full mt-1">X2 Skulls</span>
+                        </div>
+                    </div>
+
+                    <!-- Detalhes do Integrante Selecionado -->
+                    <div id="char-details-box" class="mt-4 p-4 bg-zinc-900 border border-zinc-800 rounded-xl flex gap-4 items-center">
+                        <div class="w-16 h-16 bg-black rounded-lg border border-zinc-700 flex items-center justify-center overflow-hidden">
+                            <canvas id="char-large-preview" class="w-full h-full"></canvas>
+                        </div>
+                        <div class="flex-1">
+                            <h5 id="detail-char-name" class="font-mcr-gothic text-lg text-white">Gerard Way</h5>
+                            <p id="detail-char-desc" class="text-xs text-zinc-400 mt-0.5">O líder teatral da banda. Consegue conjurar um escudo gótico de vampiro que o protege de um impacto contra obstáculos.</p>
+                            <!-- Atributos -->
+                            <div class="mt-2 flex gap-4 text-[10px] uppercase font-bold text-zinc-500">
+                                <span>Velocidade: <strong class="text-red-500" id="attr-speed">8/10</strong></span>
+                                <span>Pulo: <strong class="text-red-500" id="attr-jump">9/10</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção de Seleção de Fase (MCR Albums Era) -->
+                <div class="lg:col-span-5 flex flex-col justify-between">
+                    <h4 class="text-xs tracking-widest uppercase font-bold text-zinc-400 mb-2 flex items-center gap-2">
+                        <i class="fas fa-compact-disc text-red-500 animate-spin" style="animation-duration: 4s;"></i> Selecione a Era MCR (Fase)
+                    </h4>
+                    
+                    <div class="flex flex-col gap-2" id="stage-list">
+                        <!-- Era 1 -->
+                        <div data-stage="bullets" class="stage-card cursor-pointer border border-zinc-800 hover:border-purple-600 bg-zinc-900/70 hover:bg-zinc-900 p-3 rounded-xl flex items-center gap-3 transition-all select-none">
+                            <div class="w-10 h-10 rounded bg-indigo-950 flex items-center justify-center border border-indigo-700 font-mcr-gothic text-lg text-indigo-400">I</div>
+                            <div class="flex-1">
+                                <h5 class="text-xs font-bold text-white leading-tight">I Brought You My Bullets...</h5>
+                                <p class="text-[9.5px] text-zinc-400 leading-normal mt-0.5">Sótão gótico com velas e vampiros à solta. Trilha melancólica e acelerada.</p>
+                            </div>
+                        </div>
+                        <!-- Era 2 -->
+                        <div data-stage="threecheers" class="stage-card cursor-pointer border border-zinc-800 hover:border-red-600 bg-zinc-900/70 hover:bg-zinc-900 p-3 rounded-xl flex items-center gap-3 transition-all select-none">
+                            <div class="w-10 h-10 rounded bg-red-950 flex items-center justify-center border border-red-700 font-mcr-gothic text-lg text-red-500">II</div>
+                            <div class="flex-1">
+                                <h5 class="text-xs font-bold text-white leading-tight">Three Cheers for Sweet Revenge</h5>
+                                <p class="text-[9.5px] text-zinc-400 leading-normal mt-0.5">Cemitério vitoriano com chuvas de pétalas de rosas vermelhas e pretas.</p>
+                            </div>
+                        </div>
+                        <!-- Era 3 -->
+                        <div data-stage="blackparade" class="stage-card cursor-pointer border border-zinc-800 hover:border-zinc-500 bg-zinc-900/70 hover:bg-zinc-900 p-3 rounded-xl flex items-center gap-3 transition-all select-none">
+                            <div class="w-10 h-10 rounded bg-zinc-800 flex items-center justify-center border border-zinc-600 font-mcr-gothic text-lg text-zinc-300">III</div>
+                            <div class="flex-1">
+                                <h5 class="text-xs font-bold text-white leading-tight">The Black Parade</h5>
+                                <p class="text-[9.5px] text-zinc-400 leading-normal mt-0.5">Cidade cinzenta em cinzas. Tambores de desfile e ambiente monocromático épico.</p>
+                            </div>
+                        </div>
+                        <!-- Era 4 -->
+                        <div data-stage="dangerdays" class="stage-card cursor-pointer border border-zinc-800 hover:border-amber-500 bg-zinc-900/70 hover:bg-zinc-900 p-3 rounded-xl flex items-center gap-3 transition-all select-none">
+                            <div class="w-10 h-10 rounded bg-amber-950 flex items-center justify-center border border-amber-600 font-mcr-gothic text-lg text-amber-500">IV</div>
+                            <div class="flex-1">
+                                <h5 class="text-xs font-bold text-white leading-tight">Danger Days: Fabulous Killjoys</h5>
+                                <p class="text-[9.5px] text-zinc-400 leading-normal mt-0.5">Deserto neon com tempestades de areia coloridas e obstáculos cibernéticos BL/ind.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão de Ação Inferior -> Avançar para o Tutorial -->
+            <div class="flex justify-center border-t border-zinc-800 pt-4 mt-4">
+                <button id="launch-run-btn" class="px-16 py-3.5 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-mcr-gothic tracking-widest text-xl rounded-xl shadow-[0_4px_15px_rgba(229,9,20,0.3)] transition-all">
+                    PROSSEGUIR <i class="fas fa-chevron-right ml-2 text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- TELA 2.5: NOVO TUTORIAL E DEMO DE JOGABILIDADE             -->
+        <!-- ========================================================= -->
+        <div id="tutorial-screen" class="screen-fade absolute inset-0 z-25 hidden flex-col justify-between p-4 md:p-6 bg-zinc-950 overflow-y-auto">
+            <!-- Topo com título -->
+            <div class="flex justify-between items-center mb-4 border-b border-zinc-800 pb-3">
+                <button id="back-to-select-btn" class="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs uppercase tracking-wider text-zinc-400 flex items-center gap-1">
+                    <i class="fas fa-chevron-left text-[10px]"></i> Alterar Banda
+                </button>
+                <h3 class="font-mcr-gothic text-lg text-red-500 tracking-widest">Ensaio Técnico (Tutorial & Demo)</h3>
+                <div class="w-20"></div>
+            </div>
+
+            <!-- Layout Duas Colunas: Demo Animada + Regras do Jogo -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
+                <!-- Coluna Esquerda: Tela do simulador Demo rodando em tempo real -->
+                <div class="md:col-span-6 bg-zinc-900 border border-zinc-800 rounded-2xl p-4 flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-xs uppercase tracking-widest text-zinc-400 font-bold mb-1"><i class="fas fa-tv text-red-500 mr-1"></i> Demonstração ao vivo</h4>
+                        <p class="text-[10px] text-zinc-500 mb-3">Veja seu Chibi em formato de bolha simulando desvios de buracos e barreiras!</p>
+                    </div>
+                    
+                    <!-- Canvas de Demonstração Automatizada -->
+                    <div class="relative w-full h-[150px] bg-black rounded-xl border border-zinc-800 overflow-hidden">
+                        <canvas id="tutorial-demo-canvas" class="w-full h-full"></canvas>
+                        <!-- Badge Indicador de Comando na Demo -->
+                        <div id="demo-command-badge" class="absolute top-3 right-3 px-3 py-1 bg-red-600 text-white font-mcr-gothic text-xs tracking-wider rounded-lg shadow-lg uppercase transition-all duration-200 scale-100 opacity-100">
+                            CORRENDO...
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mt-3">
+                        <div class="bg-black/40 p-2 rounded-lg border border-zinc-800 text-center">
+                            <span class="text-[10px] font-bold text-zinc-400 block mb-0.5">SALTAR / SALTO DUPLO</span>
+                            <span class="text-xs text-white uppercase bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700 font-mono">Espaço</span>
+                        </div>
+                        <div class="bg-black/40 p-2 rounded-lg border border-zinc-800 text-center">
+                            <span class="text-[10px] font-bold text-zinc-400 block mb-0.5">ABAIXAR (SLIDE)</span>
+                            <span class="text-xs text-white uppercase bg-zinc-800 px-2 py-0.5 rounded border border-zinc-700 font-mono">Seta Baixo</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita: Guia de Coleta de Itens -->
+                <div class="md:col-span-6 flex flex-col justify-between gap-4">
+                    <!-- Cards de Regras -->
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-4">
+                        <h4 class="text-xs uppercase tracking-widest text-zinc-400 font-bold mb-3 flex items-center gap-1.5">
+                            <i class="fas fa-skull text-rose-500"></i> Alvos de Pontuação: Caveiras Fofinhas
+                        </h4>
+                        <!-- Cores e Valores das Caveiras -->
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="flex items-center gap-2 bg-black/30 p-2 rounded-lg border border-zinc-800">
+                                <span class="w-4 h-4 rounded-full bg-white border border-zinc-400 flex items-center justify-center text-[8px] text-zinc-900 font-bold">P</span>
+                                <div>
+                                    <span class="text-[9px] text-zinc-400 block font-bold leading-none">Branca (Pequena)</span>
+                                    <span class="font-bold text-white text-xs">+10 Pts</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 bg-black/30 p-2 rounded-lg border border-zinc-800">
+                                <span class="w-4.5 h-4.5 rounded-full bg-rose-500 border border-rose-400 flex items-center justify-center text-[8px] text-white font-bold">M</span>
+                                <div>
+                                    <span class="text-[9px] text-zinc-400 block font-bold leading-none">Rosa (Média)</span>
+                                    <span class="font-bold text-white text-xs">+50 Pts</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 bg-black/30 p-2 rounded-lg border border-zinc-800">
+                                <span class="w-5 h-5 rounded-full bg-cyan-500 border border-cyan-400 flex items-center justify-center text-[8px] text-white font-bold">G</span>
+                                <div>
+                                    <span class="text-[9px] text-zinc-400 block font-bold leading-none">Ciano (Grande)</span>
+                                    <span class="font-bold text-white text-xs">+100 Pts</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 bg-black/30 p-2 rounded-lg border border-zinc-800">
+                                <span class="w-5.5 h-5.5 rounded-full bg-amber-500 border border-amber-400 flex items-center justify-center text-[8px] text-black font-bold">GG</span>
+                                <div>
+                                    <span class="text-[9px] text-zinc-400 block font-bold leading-none">Dourada (Gigante)</span>
+                                    <span class="font-bold text-white text-xs">+500 Pts</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Sobrevivência (Energia) -->
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-4">
+                        <h4 class="text-xs uppercase tracking-widest text-zinc-400 font-bold mb-2 flex items-center gap-1.5">
+                            <i class="fas fa-heartbeat text-red-500 animate-pulse text-xs"></i> Regra Geral de Sobrevivência
+                        </h4>
+                        <p class="text-xs text-zinc-400 leading-relaxed">
+                            A <strong class="text-red-500">Barra de Energia</strong> diminui constantemente. Coletar padrões de caveiras fofinhas recupera vida. Se cair em um <strong class="text-red-500">Buraco</strong> ou bater em um obstáculo, você perderá energia mas será impulsionado de volta!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão de Ação Inferior -> Começar Jogo de Verdade -->
+            <div class="flex justify-center border-t border-zinc-800 pt-4 mt-4">
+                <button id="start-actual-run-btn" class="pulse-btn px-16 py-3.5 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-mcr-gothic tracking-widest text-2xl rounded-xl shadow-[0_4px_20px_rgba(229,9,20,0.4)] transition-all">
+                    COMEÇAR O SHOW! <i class="fas fa-guitar ml-2 text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- TELA 3: GAMEPLAY CANVAS E HUD                            -->
+        <!-- ========================================================= -->
+        <div id="gameplay-screen" class="screen-fade absolute inset-0 z-10 hidden flex-col">
+            
+            <!-- HUD Superior (Cookie Run Layout) -->
+            <div class="absolute top-0 left-0 right-0 p-4 flex justify-between items-center z-20 pointer-events-none select-none">
+                <!-- Informações do Jogador & Vida -->
+                <div class="flex flex-col gap-1.5 max-w-[45%]">
+                    <div class="flex items-center gap-2">
+                        <!-- Mini Avatar -->
+                        <div class="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-700 overflow-hidden flex items-center justify-center pointer-events-auto">
+                            <canvas id="hud-char-avatar" class="w-full h-full"></canvas>
+                        </div>
+                        <div class="flex flex-col">
+                            <span id="hud-char-name" class="text-xs font-bold tracking-wider text-white">Gerard</span>
+                            <span id="hud-stage-badge" class="text-[9px] uppercase px-1.5 py-0.2 bg-zinc-800 border border-zinc-700 text-zinc-400 rounded-full w-max">Bullets</span>
+                        </div>
+                    </div>
+                    <!-- Barra de Energia (Cookie Run Core Mechanic) -->
+                    <div class="flex items-center gap-2 pointer-events-auto" title="A energia diminui com o tempo e colisões!">
+                        <i class="fas fa-heartbeat text-red-500 animate-pulse text-xs"></i>
+                        <div class="w-40 sm:w-52 h-4 bg-zinc-900 rounded-full border border-zinc-700 overflow-hidden relative">
+                            <!-- Progresso de Energia -->
+                            <div id="hud-energy-bar" class="h-full bg-gradient-to-r from-red-600 to-rose-400 transition-all duration-100" style="width: 100%;"></div>
+                            <!-- Linha divisória de aviso -->
+                            <div class="absolute inset-y-0 right-1/4 w-0.5 bg-red-950 opacity-50"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel de Status Central (Score, Multiplier e Coleta de Caveiras) -->
+                <div class="flex flex-col items-center">
+                    <div class="bg-black/60 backdrop-blur-md border border-zinc-800/80 px-4 py-1.5 rounded-2xl flex items-center gap-4 text-center pointer-events-auto">
+                        <!-- Pontuação Principal -->
+                        <div>
+                            <span class="text-[8px] tracking-widest uppercase text-zinc-500 font-bold block">PONTOS</span>
+                            <span id="hud-score-val" class="text-xl font-mcr-gothic text-white tracking-wider">00000</span>
+                        </div>
+                        <!-- Multiplicador -->
+                        <div class="border-l border-zinc-800 pl-4">
+                            <span class="text-[8px] tracking-widest uppercase text-zinc-500 font-bold block">MULTIPLICADOR</span>
+                            <span id="hud-mult-val" class="text-xs font-bold text-red-500">x1.0</span>
+                        </div>
+                    </div>
+                    <!-- Mostrador de Habilidade Ativa -->
+                    <div id="hud-power-indicator" class="mt-1 px-3 py-0.5 bg-zinc-900/90 border border-zinc-800 text-[9px] uppercase tracking-wider text-red-400 rounded-full font-bold hidden items-center gap-1.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span>
+                        <span id="hud-power-text">Escudo Ativo</span>
+                    </div>
+                </div>
+
+                <!-- Botão Pause / Desbloqueio e Stats Rápido -->
+                <div class="flex items-center gap-2 pointer-events-auto">
+                    <!-- Painel de Caveiras Coletadas -->
+                    <div class="hidden sm:flex items-center gap-1.5 bg-black/60 px-3 py-1.5 rounded-xl border border-zinc-800 text-xs">
+                        <i class="fas fa-skull text-rose-500 text-xs skull-float"></i>
+                        <span id="hud-skulls-total" class="font-bold text-zinc-300">0</span>
+                    </div>
+                    <button id="pause-btn" class="w-9 h-9 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-700 flex items-center justify-center text-zinc-300 transition-all">
+                        <i class="fas fa-pause text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Elemento Canvas de Renderização do Jogo -->
+            <canvas id="game-canvas" class="flex-1 w-full bg-neutral-950"></canvas>
+
+            <!-- Controles Móveis Transparentes de Alta Sensibilidade (Exclusivo UX/UI Mobile) -->
+            <div class="absolute inset-x-0 bottom-0 p-4 md:p-6 flex justify-between items-end pointer-events-none z-20 select-none">
+                <!-- Botão de Deslizar (Slide) -->
+                <button id="touch-slide-btn" class="pointer-events-auto w-18 h-18 sm:w-20 sm:h-20 bg-black/50 hover:bg-black/70 active:scale-90 border border-zinc-800 active:border-red-500 text-zinc-300 rounded-2xl flex flex-col items-center justify-center transition-all">
+                    <i class="fas fa-angle-double-down text-lg"></i>
+                    <span class="text-[9px] uppercase font-bold tracking-wider mt-1 text-zinc-400">Abaixar</span>
+                </button>
+                <!-- Dica visual no rodapé para desktops -->
+                <div class="hidden sm:block text-center text-[10px] text-zinc-600 font-bold uppercase tracking-widest pb-2">
+                    <i class="fas fa-keyboard mr-1"></i> ESPAÇO: Saltar / SETA BAIXO: Abaixar
+                </div>
+                <!-- Botão de Pular (Jump) -->
+                <button id="touch-jump-btn" class="pointer-events-auto w-18 h-18 sm:w-20 sm:h-20 bg-black/50 hover:bg-black/70 active:scale-90 border border-zinc-800 active:border-red-500 text-zinc-300 rounded-2xl flex flex-col items-center justify-center transition-all">
+                    <i class="fas fa-angle-double-up text-lg"></i>
+                    <span class="text-[9px] uppercase font-bold tracking-wider mt-1 text-zinc-400">Saltar</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- TELA 4: TELA DE PAUSE                                     -->
+        <!-- ========================================================= -->
+        <div id="pause-screen" class="screen-fade absolute inset-0 z-40 hidden bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-6 select-none">
+            <div class="max-w-xs w-full bg-zinc-950 border border-zinc-800 p-6 rounded-2xl text-center shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                <i class="fas fa-pause text-red-600 text-3xl mb-3 animate-pulse"></i>
+                <h3 class="font-mcr-gothic text-2xl text-white tracking-widest mb-1">Música Pausada</h3>
+                <p class="text-xs text-zinc-500 mb-6 uppercase">A turnê não pode parar!</p>
+                
+                <div class="flex flex-col gap-3">
+                    <button id="resume-game-btn" class="w-full py-3 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-mcr-gothic tracking-widest rounded-xl text-sm transition-all">
+                        Retomar Corrida
+                    </button>
+                    <button id="abort-run-btn" class="w-full py-2.5 bg-zinc-900 hover:bg-zinc-800 active:scale-95 text-zinc-400 border border-zinc-800 rounded-xl text-xs uppercase tracking-wider transition-all">
+                        Abandonar Show
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- TELA 5: TELA DE GAME OVER (RESULTADOS)                    -->
+        <!-- ========================================================= -->
+        <div id="gameover-screen" class="screen-fade absolute inset-0 z-30 hidden bg-zinc-950 flex flex-col justify-between p-6 overflow-y-auto">
+            <!-- Topo com slogan lendário de Helena -->
+            <div class="text-center mt-4">
+                <h4 class="text-xs text-zinc-600 uppercase tracking-[0.2em] font-bold">Show Encerrado</h4>
+                <h2 id="go-quote" class="font-mcr-gothic text-xl md:text-2xl text-red-600 tracking-wide mt-1">"So long and goodnight..."</h2>
+            </div>
+
+            <!-- Resumo de Desempenho e Coletas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-auto max-w-2xl mx-auto w-full">
+                <!-- Painel da esquerda: Pontuação Final -->
+                <div class="bg-zinc-900 border border-zinc-800/80 p-5 rounded-2xl text-center flex flex-col justify-center">
+                    <span class="text-xs tracking-widest uppercase text-zinc-500 font-bold">PONTUAÇÃO FINAL</span>
+                    <h1 id="go-score" class="font-mcr-title text-5xl text-white tracking-wider my-2">00000</h1>
+                    
+                    <!-- Recorde Pessoal -->
+                    <div id="go-high-score-container" class="mt-2 text-xs py-1.5 px-3 bg-red-950/30 border border-red-900/50 rounded-lg text-red-400 font-bold uppercase tracking-wider inline-flex items-center gap-1.5 mx-auto">
+                        <i class="fas fa-crown text-amber-500"></i> Recorde: <span id="go-high-score">00000</span>
+                    </div>
+                </div>
+
+                <!-- Painel da direita: Caveiras por Tamanho -->
+                <div class="bg-zinc-900 border border-zinc-800/80 p-5 rounded-2xl">
+                    <h5 class="text-xs tracking-widest uppercase text-zinc-400 font-bold mb-3 border-b border-zinc-800 pb-2">
+                        <i class="fas fa-skull text-rose-500 mr-1.5"></i> Caveiras Coletadas
+                    </h5>
+                    
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div class="flex items-center gap-2 bg-black/40 p-2 rounded-lg border border-zinc-800/60">
+                            <span class="w-3.5 h-3.5 rounded-full bg-neutral-200 border border-zinc-400 flex items-center justify-center text-[8px] text-zinc-900 font-bold">P</span>
+                            <div>
+                                <span class="text-[9px] text-zinc-500 uppercase block font-bold leading-none">Pequena (10)</span>
+                                <span id="go-skull-sm" class="font-bold text-white text-sm leading-tight">0</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-black/40 p-2 rounded-lg border border-zinc-800/60">
+                            <span class="w-4 h-4 rounded-full bg-rose-500 border border-rose-400 flex items-center justify-center text-[8px] text-white font-bold">M</span>
+                            <div>
+                                <span class="text-[9px] text-zinc-500 uppercase block font-bold leading-none">Média (50)</span>
+                                <span id="go-skull-md" class="font-bold text-white text-sm leading-tight">0</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-black/40 p-2 rounded-lg border border-zinc-800/60">
+                            <span class="w-4.5 h-4.5 rounded-full bg-cyan-500 border border-cyan-400 flex items-center justify-center text-[8px] text-white font-bold">G</span>
+                            <div>
+                                <span class="text-[9px] text-zinc-500 uppercase block font-bold leading-none">Grande (100)</span>
+                                <span id="go-skull-lg" class="font-bold text-white text-sm leading-tight">0</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-black/40 p-2 rounded-lg border border-zinc-800/60">
+                            <span class="w-5 h-5 rounded-full bg-amber-500 border border-amber-400 flex items-center justify-center text-[8px] text-black font-bold">GG</span>
+                            <div>
+                                <span class="text-[9px] text-zinc-500 uppercase block font-bold leading-none">Gigante (500)</span>
+                                <span id="go-skull-xl" class="font-bold text-white text-sm leading-tight">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões de Ação Inferiores -->
+            <div class="flex flex-col sm:flex-row gap-3 items-center justify-center border-t border-zinc-800 pt-4 max-w-lg mx-auto w-full">
+                <button id="go-retry-btn" class="w-full py-3.5 bg-red-600 hover:bg-red-700 active:scale-95 text-white font-mcr-gothic tracking-widest text-lg rounded-xl shadow-[0_4px_15px_rgba(229,9,20,0.3)] transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-redo text-xs"></i> Tentar Novamente
+                </button>
+                <button id="go-menu-btn" class="w-full py-3 bg-zinc-900 hover:bg-zinc-800 active:scale-95 text-zinc-400 border border-zinc-800 rounded-xl font-mcr-gothic tracking-widest text-base transition-all">
+                    Voltar ao Menu
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Sound Synthesis & Game Engine JavaScript -->
+    <script>
+        // -------------------------------------------------------------
+        // ESTADO GLOBAL DO JOGO
+        // -------------------------------------------------------------
+        const gameState = {
+            currentScreen: 'menu', // 'menu', 'selection', 'tutorial', 'gameplay', 'gameover'
+            character: 'gerard',   // 'gerard', 'ray', 'frank', 'mikey'
+            stage: 'bullets',      // 'bullets', 'threecheers', 'blackparade', 'dangerdays'
+            isMuted: false,
+            isPaused: false,
+            score: 0,
+            multiplier: 1.0,
+            skullsCount: { sm: 0, md: 0, lg: 0, xl: 0 },
+            highScore: parseInt(localStorage.getItem('mcr_high_score') || '0', 10),
+            energy: 100,
+            stageDistance: 0
+        };
+
+        // -------------------------------------------------------------
+        // SINTETIZADOR DE ÁUDIO NATIVO (WEB AUDIO API)
+        // -------------------------------------------------------------
+        const AudioEngine = {
+            ctx: null,
+            mainVolume: null,
+            melodyOsc: null,
+            bassOsc: null,
+            tempo: 130,
+            sequencerTimer: null,
+            currentNoteIndex: 0,
+            currentSong: [],
+
+            notes: {
+                'C3': 130.81, 'C#3': 138.59, 'D3': 146.83, 'D#3': 155.56, 'E3': 164.81, 'F3': 174.61, 'F#3': 185.00, 'G3': 196.00, 'G#3': 207.65, 'A3': 220.00, 'A#3': 233.08, 'B3': 246.94,
+                'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13, 'E4': 329.63, 'F4': 349.23, 'F#4': 369.99, 'G4': 392.00, 'G#4': 415.30, 'A4': 440.00, 'A#4': 466.16, 'B4': 493.88,
+                'C5': 523.25, 'C#5': 554.37, 'D5': 587.33, 'D#5': 622.25, 'E5': 659.25, 'F5': 698.46, 'F#5': 739.99, 'G5': 783.99, 'G#5': 830.61, 'A5': 880.00, 'A#5': 932.33, 'B5': 987.77,
+                'C6': 1046.50
+            },
+
+            init() {
+                if (this.ctx) return;
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                this.ctx = new AudioContextClass();
+                this.mainVolume = this.ctx.createGain();
+                this.mainVolume.gain.setValueAtTime(gameState.isMuted ? 0 : 0.15, this.ctx.currentTime);
+                this.mainVolume.connect(this.ctx.destination);
+            },
+
+            setMute(isMuted) {
+                if (!this.mainVolume) return;
+                this.mainVolume.gain.setValueAtTime(isMuted ? 0 : 0.15, this.ctx.currentTime);
+            },
+
+            playJumpSound() {
+                this.init();
+                if (gameState.isMuted || !this.ctx) return;
+                
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                
+                osc.frequency.setValueAtTime(150, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, this.ctx.currentTime + 0.15);
+                
+                gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
+                
+                osc.connect(gain);
+                gain.connect(this.mainVolume);
+                
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.16);
+            },
+
+            playCollectSound(size) {
+                this.init();
+                if (gameState.isMuted || !this.ctx) return;
+
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+
+                let baseFreq = 440;
+                if (size === 'md') baseFreq = 554.37;
+                if (size === 'lg') baseFreq = 659.25;
+                if (size === 'xl') baseFreq = 880;
+
+                osc.frequency.setValueAtTime(baseFreq, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.5, this.ctx.currentTime + 0.12);
+
+                gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.005, this.ctx.currentTime + 0.12);
+
+                osc.connect(gain);
+                gain.connect(this.mainVolume);
+
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.13);
+            },
+
+            playHitSound() {
+                this.init();
+                if (gameState.isMuted || !this.ctx) return;
+
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+
+                osc.frequency.setValueAtTime(120, this.ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(40, this.ctx.currentTime + 0.25);
+
+                gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+
+                osc.connect(gain);
+                gain.connect(this.mainVolume);
+
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.26);
+            },
+
+            playGNote() {
+                this.init();
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(783.99, this.ctx.currentTime); // G5
+                
+                gain.gain.setValueAtTime(0.0, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, this.ctx.currentTime + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 2.5);
+
+                osc.connect(gain);
+                gain.connect(this.mainVolume);
+
+                osc.start();
+                osc.stop(this.ctx.currentTime + 2.6);
+            },
+
+            songs: {
+                bullets: [
+                    { note: 'A4', dur: 0.2 }, { note: 'C5', dur: 0.2 }, { note: 'E5', dur: 0.2 }, { note: 'A5', dur: 0.2 },
+                    { note: 'G5', dur: 0.2 }, { note: 'E5', dur: 0.2 }, { note: 'C5', dur: 0.2 }, { note: 'G4', dur: 0.2 },
+                    { note: 'F4', dur: 0.2 }, { note: 'A4', dur: 0.2 }, { note: 'C5', dur: 0.2 }, { note: 'F5', dur: 0.2 },
+                    { note: 'E5', dur: 0.2 }, { note: 'C5', dur: 0.2 }, { note: 'A4', dur: 0.2 }, { note: 'E4', dur: 0.2 }
+                ],
+                threecheers: [
+                    { note: 'F#4', dur: 0.25 }, { note: 'G#4', dur: 0.25 }, { note: 'A4', dur: 0.25 }, { note: 'B4', dur: 0.25 },
+                    { note: 'C#5', dur: 0.5 }, { note: 'A4', dur: 0.25 }, { note: 'F#4', dur: 0.5 },
+                    { note: 'D5', dur: 0.25 }, { note: 'C#5', dur: 0.25 }, { note: 'B4', dur: 0.25 }, { note: 'A4', dur: 0.25 },
+                    { note: 'G#4', dur: 0.5 }, { note: 'E4', dur: 0.25 }, { note: 'F#4', dur: 0.5 }
+                ],
+                blackparade: [
+                    { note: 'G5', dur: 0.7 },
+                    { note: 'F#5', dur: 0.35 }, { note: 'B5', dur: 0.35 },
+                    { note: 'E5', dur: 0.35 },  { note: 'A5', dur: 0.35 },
+                    { note: 'D5', dur: 0.35 },  { note: 'G5', dur: 0.35 },
+                    { note: 'C5', dur: 0.35 },  { note: 'F#5', dur: 0.35 },
+                    { note: 'B4', dur: 0.35 },  { note: 'E5', dur: 0.35 },
+                    { note: 'A4', dur: 0.7 }
+                ],
+                dangerdays: [
+                    { note: 'B4', dur: 0.15 }, { note: 'B4', dur: 0.15 }, { note: 'D5', dur: 0.15 }, { note: 'B4', dur: 0.15 },
+                    { note: 'A4', dur: 0.15 }, { note: 'A4', dur: 0.15 }, { note: 'C#5', dur: 0.15 }, { note: 'A4', dur: 0.15 },
+                    { note: 'G4', dur: 0.15 }, { note: 'G4', dur: 0.15 }, { note: 'B4', dur: 0.15 }, { note: 'G4', dur: 0.15 },
+                    { note: 'F#4', dur: 0.15 }, { note: 'A4', dur: 0.15 }, { note: 'F#4', dur: 0.15 }, { note: 'E4', dur: 0.3 }
+                ]
+            },
+
+            playSong(songKey) {
+                this.init();
+                this.stopSong();
+                
+                this.currentSong = this.songs[songKey] || this.songs.threecheers;
+                this.currentNoteIndex = 0;
+                
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+
+                const playNextNote = () => {
+                    if (gameState.isPaused || gameState.currentScreen !== 'gameplay') return;
+                    
+                    const noteObj = this.currentSong[this.currentNoteIndex];
+                    if (!noteObj) {
+                        this.currentNoteIndex = 0;
+                        playNextNote();
+                        return;
+                    }
+
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    
+                    if (gameState.stage === 'bullets') osc.type = 'triangle';
+                    else if (gameState.stage === 'threecheers') osc.type = 'sawtooth';
+                    else if (gameState.stage === 'blackparade') osc.type = 'sine';
+                    else osc.type = 'square';
+
+                    const freq = this.notes[noteObj.note] || 440;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    
+                    gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + noteObj.dur - 0.02);
+
+                    osc.connect(gain);
+                    gain.connect(this.mainVolume);
+
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + noteObj.dur);
+
+                    this.currentNoteIndex = (this.currentNoteIndex + 1) % this.currentSong.length;
+                    this.sequencerTimer = setTimeout(playNextNote, noteObj.dur * 1000);
+                };
+
+                playNextNote();
+            },
+
+            stopSong() {
+                if (this.sequencerTimer) {
+                    clearTimeout(this.sequencerTimer);
+                    this.sequencerTimer = null;
+                }
+            }
+        };
+
+        // -------------------------------------------------------------
+        // DADOS DOS PERSONAGENS (COOKIE RUN VIBES)
+        // -------------------------------------------------------------
+        const charactersData = {
+            gerard: {
+                name: "Gerard Way",
+                desc: "O líder teatral em formato redondinho. Invoca um Escudo Gótico circular que absorve uma colisão sem sofrer perda de energia.",
+                ability: "Escudo Gótico",
+                speed: 7,
+                jump: 9,
+                color: "#e50914"
+            },
+            ray: {
+                name: "Ray Toro",
+                desc: "O virtuoso guitarrista com sua volumosa e redonda cabeleira. Atrai todas as caveiras próximas com sua frequência harmônica.",
+                ability: "Frequência Magnética",
+                speed: 8,
+                jump: 7,
+                color: "#ff9f43"
+            },
+            frank: {
+                name: "Frank Iero",
+                desc: "Atitude punk e veloz com formato arredondado fofo. Ativa impulsos curtos de velocidade (Dash) após deslizar por 2 segundos.",
+                ability: "Riff Dash",
+                speed: 9,
+                jump: 8,
+                color: "#10ac84"
+            },
+            mikey: {
+                name: "Mikey Way",
+                desc: "O baixista estiloso de óculos redondos. Sua vibração de ritmo duplica permanentemente a pontuação de todas as caveiras médias e grandes.",
+                ability: "Roteador de Pontos",
+                speed: 7,
+                jump: 8,
+                color: "#54a0ff"
+            }
+        };
+
+        // -------------------------------------------------------------
+        // DADOS DAS FASES (THEMATICS)
+        // -------------------------------------------------------------
+        const stagesData = {
+            bullets: {
+                name: "I Brought You My Bullets...",
+                bgColor: "#0c0414",
+                groundColor: "#1d0e32",
+                accentColor: "#6c5ce7",
+                obstacleType: "vampire_bat",
+                speedMultiplier: 1.0
+            },
+            threecheers: {
+                name: "Three Cheers for Sweet Revenge",
+                bgColor: "#140303",
+                groundColor: "#2d0b0b",
+                accentColor: "#ff4d4d",
+                obstacleType: "tombstone",
+                speedMultiplier: 1.15
+            },
+            blackparade: {
+                name: "The Black Parade",
+                bgColor: "#1c1c1c",
+                groundColor: "#333333",
+                accentColor: "#f1f1f1",
+                obstacleType: "marching_drum",
+                speedMultiplier: 1.3
+            },
+            dangerdays: {
+                name: "Danger Days: Fabulous Killjoys",
+                bgColor: "#241505",
+                groundColor: "#472506",
+                accentColor: "#ff9f43",
+                obstacleType: "laser_barrier",
+                speedMultiplier: 1.5
+            }
+        };
+
+        // -------------------------------------------------------------
+        // NOVO MOTOR DE DESENHO: CHIBIS EM FORMATO ARREDONDADO/GLOSSY (TOY)
+        // -------------------------------------------------------------
+        function drawChibi(ctx, cx, cy, r, type) {
+            ctx.save();
+
+            // 1. Sombra suave inferior
+            ctx.beginPath();
+            ctx.ellipse(cx, cy + r * 0.9, r * 0.8, r * 0.25, 0, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+            ctx.fill();
+
+            // 2. Corpinho Arredondado (Pill-shape estilizado combinando com a era)
+            ctx.beginPath();
+            ctx.ellipse(cx, cy + r * 0.65, r * 0.55, r * 0.45, 0, 0, Math.PI * 2);
+            if (type === 'gerard') {
+                ctx.fillStyle = "#111111"; // Blazer preto
+                ctx.fill();
+                // Detalhe da gravata vermelha
+                ctx.beginPath();
+                ctx.moveTo(cx - r * 0.08, cy + r * 0.3);
+                ctx.lineTo(cx + r * 0.08, cy + r * 0.3);
+                ctx.lineTo(cx, cy + r * 0.7);
+                ctx.closePath();
+                ctx.fillStyle = "#e50914";
+                ctx.fill();
+            } else if (type === 'ray') {
+                ctx.fillStyle = "#3b5998"; // Jaqueta Jeans
+                ctx.fill();
+                // Detalhe da camiseta amarela
+                ctx.beginPath();
+                ctx.arc(cx, cy + r * 0.3, r * 0.15, 0, Math.PI);
+                ctx.fillStyle = "#feca57";
+                ctx.fill();
+            } else if (type === 'frank') {
+                ctx.fillStyle = "#222222"; // Colete punk
+                ctx.fill();
+                // Detalhe das listras vermelhas nos ombros
+                ctx.fillStyle = "#ff4d4d";
+                ctx.fillRect(cx - r * 0.4, cy + r * 0.5, r * 0.15, r * 0.2);
+                ctx.fillRect(cx + r * 0.25, cy + r * 0.5, r * 0.15, r * 0.2);
+            } else if (type === 'mikey') {
+                ctx.fillStyle = "#2e86de"; // Blusa azul listrada
+                ctx.fill();
+                // Listras brancas do visual geek-chic
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = r * 0.06;
+                ctx.beginPath();
+                ctx.moveTo(cx - r * 0.3, cy + r * 0.55);
+                ctx.lineTo(cx + r * 0.3, cy + r * 0.55);
+                ctx.moveTo(cx - r * 0.25, cy + r * 0.75);
+                ctx.lineTo(cx + r * 0.25, cy + r * 0.75);
+                ctx.stroke();
+            }
+
+            // 3. Cabeça Redondinha (Skin Base)
+            ctx.beginPath();
+            ctx.arc(cx, cy, r * 0.8, 0, Math.PI * 2);
+            ctx.fillStyle = "#fff0eb"; // Pele Chibi Pálida
+            ctx.fill();
+
+            // 4. Detalhes de Cabelo (Estilo bolha que envolve a cabeça)
+            if (type === 'gerard') {
+                // Cabelo preto gótico em cúpula arredondada
+                ctx.beginPath();
+                ctx.arc(cx, cy - r * 0.2, r * 0.85, Math.PI * 0.95, Math.PI * 2.05);
+                ctx.lineTo(cx + r * 0.8, cy + r * 0.2);
+                ctx.quadraticCurveTo(cx + r * 0.4, cy - r * 0.1, cx, cy + r * 0.15);
+                ctx.quadraticCurveTo(cx - r * 0.4, cy - r * 0.1, cx - r * 0.8, cy + r * 0.2);
+                ctx.closePath();
+                ctx.fillStyle = "#111111";
+                ctx.fill();
+            } else if (type === 'ray') {
+                // Cabeleira Afro Puff perfeitamente circular e texturizada
+                ctx.beginPath();
+                ctx.arc(cx, cy - r * 0.1, r * 0.95, 0, Math.PI * 2);
+                ctx.fillStyle = "#4a2d0b";
+                ctx.fill();
+                // Mini círculos adicionais para criar a textura arredondada e fofa de cachos
+                ctx.fillStyle = "#3d2407";
+                for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 4) {
+                    const ox = cx + Math.cos(angle) * r * 0.85;
+                    const oy = cy - r * 0.1 + Math.sin(angle) * r * 0.85;
+                    ctx.beginPath();
+                    ctx.arc(ox, oy, r * 0.25, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                // Redesenhar o centro da pele para o rosto aparecer correto
+                ctx.beginPath();
+                ctx.arc(cx, cy, r * 0.7, 0, Math.PI * 2);
+                ctx.fillStyle = "#fff0eb";
+                ctx.fill();
+                // Franja cacheada
+                ctx.fillStyle = "#4a2d0b";
+                ctx.beginPath();
+                ctx.arc(cx - r * 0.3, cy - r * 0.5, r * 0.25, 0, Math.PI * 2);
+                ctx.arc(cx + r * 0.3, cy - r * 0.5, r * 0.25, 0, Math.PI * 2);
+                ctx.arc(cx, cy - r * 0.6, r * 0.2, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (type === 'frank') {
+                // Cabelo espetado, mas com contornos circulares suaves (punk fofo)
+                ctx.beginPath();
+                ctx.arc(cx, cy - r * 0.15, r * 0.82, Math.PI * 0.9, Math.PI * 2.1);
+                // Pequenos espinhos estilizados ao redor
+                ctx.lineTo(cx + r * 0.8, cy - r * 0.1);
+                ctx.lineTo(cx + r * 0.9, cy - r * 0.4);
+                ctx.lineTo(cx + r * 0.6, cy - r * 0.5);
+                ctx.lineTo(cx + r * 0.4, cy - r * 0.9);
+                ctx.lineTo(cx, cy - r * 0.75);
+                ctx.lineTo(cx - r * 0.4, cy - r * 0.9);
+                ctx.lineTo(cx - r * 0.6, cy - r * 0.5);
+                ctx.lineTo(cx - r * 0.9, cy - r * 0.4);
+                ctx.closePath();
+                ctx.fillStyle = "#222222";
+                ctx.fill();
+            } else if (type === 'mikey') {
+                // Cabelo loiro comportado e perfeitamente arredondado
+                ctx.beginPath();
+                ctx.arc(cx, cy - r * 0.2, r * 0.85, Math.PI, 0);
+                ctx.lineTo(cx + r * 0.8, cy + r * 0.1);
+                ctx.quadraticCurveTo(cx, cy - r * 0.2, cx - r * 0.8, cy + r * 0.1);
+                ctx.closePath();
+                ctx.fillStyle = "#c5a880";
+                ctx.fill();
+            }
+
+            // 5. Bochechas Rosadas e Redondinhas (Blush de alta transparência)
+            ctx.beginPath();
+            ctx.arc(cx - r * 0.45, cy + r * 0.15, r * 0.18, 0, Math.PI * 2);
+            ctx.arc(cx + r * 0.45, cy + r * 0.15, r * 0.18, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255, 75, 75, 0.25)";
+            ctx.fill();
+
+            // 6. Olhos Redondos Grandes e Brilhantes (Glossy/Sparkle Eyes)
+            const drawEye = (ex, ey) => {
+                ctx.beginPath();
+                ctx.arc(ex, ey, r * 0.16, 0, Math.PI * 2);
+                ctx.fillStyle = "#111111";
+                ctx.fill();
+                // Grande brilho branco reflexivo
+                ctx.beginPath();
+                ctx.arc(ex - r * 0.05, ey - r * 0.05, r * 0.06, 0, Math.PI * 2);
+                ctx.fillStyle = "#ffffff";
+                ctx.fill();
+                // Pequeno brilho secundário
+                ctx.beginPath();
+                ctx.arc(ex + r * 0.05, ey + r * 0.05, r * 0.03, 0, Math.PI * 2);
+                ctx.fillStyle = "#ffffff";
+                ctx.fill();
+            };
+
+            const eyeY = cy + r * 0.02;
+            const eyeSpacing = r * 0.28;
+
+            // Maquiagem vermelha ao redor dos olhos de Gerard
+            if (type === 'gerard') {
+                ctx.beginPath();
+                ctx.arc(cx - eyeSpacing, eyeY, r * 0.24, 0, Math.PI * 2);
+                ctx.arc(cx + eyeSpacing, eyeY, r * 0.24, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(229, 9, 20, 0.4)";
+                ctx.fill();
+            }
+
+            drawEye(cx - eyeSpacing, eyeY);
+            drawEye(cx + eyeSpacing, eyeY);
+
+            // Detalhe de Óculos Redondos do Mikey
+            if (type === 'mikey') {
+                ctx.strokeStyle = "#111111";
+                ctx.lineWidth = r * 0.08;
+                ctx.beginPath();
+                ctx.arc(cx - eyeSpacing, eyeY, r * 0.26, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.arc(cx + eyeSpacing, eyeY, r * 0.26, 0, Math.PI * 2);
+                ctx.stroke();
+                // Ponte dos óculos
+                ctx.beginPath();
+                ctx.moveTo(cx - eyeSpacing + r * 0.26, eyeY);
+                ctx.lineTo(cx + eyeSpacing - r * 0.26, eyeY);
+                ctx.stroke();
+            }
+
+            // Tatuagem de "X" na bochecha do Frank Iero
+            if (type === 'frank') {
+                ctx.strokeStyle = "#111111";
+                ctx.lineWidth = r * 0.05;
+                const tx = cx - r * 0.45;
+                const ty = cy + r * 0.35;
+                const ts = r * 0.08;
+                ctx.beginPath();
+                ctx.moveTo(tx - ts, ty - ts); ctx.lineTo(tx + ts, ty + ts);
+                ctx.moveTo(tx + ts, ty - ts); ctx.lineTo(tx - ts, ty + ts);
+                ctx.stroke();
+            }
+
+            // 7. Boca sorridente e delicada (curva fofa)
+            ctx.beginPath();
+            ctx.arc(cx, cy + r * 0.2, r * 0.12, 0, Math.PI);
+            ctx.strokeStyle = "#111111";
+            ctx.lineWidth = r * 0.05;
+            ctx.stroke();
+
+            // 8. Brilho Bubble/3D Glass (Camada de reflexo brilhante para visual arredondado/adesivo)
+            // Reflexo em meia-lua superior esquerdo
+            ctx.beginPath();
+            ctx.arc(cx - r * 0.25, cy - r * 0.35, r * 0.35, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+            ctx.fill();
+
+            // Ponto de luz intenso (Hotspot de reflexo)
+            ctx.beginPath();
+            ctx.arc(cx - r * 0.35, cy - r * 0.45, r * 0.1, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        // -------------------------------------------------------------
+        // REGULARIZAÇÃO DA UI E SELEÇÃO DE PERSONAGENS
+        // -------------------------------------------------------------
+        function initUIPreviews() {
+            ['gerard', 'ray', 'frank', 'mikey'].forEach(char => {
+                const cv = document.getElementById(`canvas-preview-${char}`);
+                if (cv) {
+                    cv.width = 60;
+                    cv.height = 60;
+                    const ctx = cv.getContext('2d');
+                    ctx.clearRect(0, 0, 60, 60);
+                    drawChibi(ctx, 30, 30, 20, char);
+                }
+            });
+            updateDetailPanel();
+        }
+
+        function updateDetailPanel() {
+            const char = gameState.character;
+            const data = charactersData[char];
+            
+            const cvLarge = document.getElementById("char-large-preview");
+            if (cvLarge) {
+                cvLarge.width = 100;
+                cvLarge.height = 100;
+                const ctx = cvLarge.getContext('2d');
+                ctx.clearRect(0, 0, 100, 100);
+                drawChibi(ctx, 50, 50, 36, char);
+            }
+
+            document.getElementById("detail-char-name").innerText = data.name;
+            document.getElementById("detail-char-desc").innerText = data.desc;
+            document.getElementById("attr-speed").innerText = `${data.speed}/10`;
+            document.getElementById("attr-jump").innerText = `${data.jump}/10`;
+
+            document.querySelectorAll('.char-card').forEach(card => {
+                if (card.getAttribute('data-char') === char) {
+                    card.classList.add('border-red-600', 'bg-red-950/20');
+                    card.classList.remove('border-zinc-800', 'bg-zinc-900');
+                } else {
+                    card.classList.remove('border-red-600', 'bg-red-950/20');
+                    card.classList.add('border-zinc-800', 'bg-zinc-900');
+                }
+            });
+        }
+
+        function updateStageSelection() {
+            document.querySelectorAll('.stage-card').forEach(card => {
+                const stage = card.getAttribute('data-stage');
+                if (stage === gameState.stage) {
+                    card.classList.add('border-red-600', 'bg-red-950/20');
+                    card.classList.remove('border-zinc-800', 'bg-zinc-900/70');
+                } else {
+                    card.classList.remove('border-red-600', 'bg-red-950/20');
+                    card.classList.add('border-zinc-800', 'bg-zinc-900/70');
+                }
+            });
+        }
+
+        // -------------------------------------------------------------
+        // SISTEMA DE SIMULAÇÃO / DEMO DO TUTORIAL (AUTOMATED RUNNER)
+        // -------------------------------------------------------------
+        const TutorialDemoEngine = {
+            canvas: null,
+            ctx: null,
+            timer: 0,
+            active: false,
+            
+            // Atributos do Chibi Simulado
+            player: {
+                x: 50,
+                y: 90,
+                vy: 0,
+                isJumping: false,
+                isSliding: false,
+                groundY: 90
+            },
+            
+            simulatedObstacles: [],
+            simulatedSkulls: [],
+            
+            init() {
+                this.canvas = document.getElementById('tutorial-demo-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.width = 400;
+                this.canvas.height = 150;
+            },
+            
+            start() {
+                this.active = true;
+                this.timer = 0;
+                this.player.y = this.player.groundY;
+                this.player.vy = 0;
+                this.player.isJumping = false;
+                this.player.isSliding = false;
+                this.simulatedObstacles = [];
+                this.simulatedSkulls = [];
+                this.loop();
+            },
+            
+            stop() {
+                this.active = false;
+            },
+            
+            loop() {
+                if (!this.active || gameState.currentScreen !== 'tutorial') return;
+                
+                this.timer++;
+                this.updateSimulation();
+                this.drawSimulation();
+                
+                requestAnimationFrame(() => this.loop());
+            },
+            
+            updateSimulation() {
+                const stageTimer = this.timer % 320;
+                const badge = document.getElementById('demo-command-badge');
+                
+                // Spawn programado para a demonstração
+                if (stageTimer === 5) {
+                    // Obstáculo simples tipo barreira
+                    this.simulatedObstacles.push({ x: 420, y: 95, width: 16, height: 25, type: 'hurdle' });
+                }
+                
+                if (stageTimer === 100) {
+                    // Obstáculo simples tipo buraco (cria-se um vão imaginário)
+                    this.simulatedObstacles.push({ x: 420, y: 120, width: 45, height: 30, type: 'hole' });
+                }
+
+                if (stageTimer === 200) {
+                    // Obstáculo simples suspenso
+                    this.simulatedObstacles.push({ x: 420, y: 55, width: 16, height: 30, type: 'barrier' });
+                }
+                
+                // Spawn de uma trilha de caveiras
+                if (stageTimer === 240) {
+                    this.simulatedSkulls.push({ x: 420, y: 70 }, { x: 450, y: 70 }, { x: 480, y: 70 });
+                }
+
+                // Gatilho de Pulo automático (para barreira ou buraco)
+                const groundObs = this.simulatedObstacles.find(o => (o.type === 'hurdle' || o.type === 'hole'));
+                if (groundObs && groundObs.x > 50 && groundObs.x < 110 && !this.player.isJumping) {
+                    this.player.vy = -7.5;
+                    this.player.isJumping = true;
+                    if (badge) {
+                        badge.innerText = "ESPAÇO (PULO!)";
+                        badge.className = "absolute top-3 right-3 px-3 py-1 bg-blue-600 text-white font-mcr-gothic text-xs tracking-wider rounded-lg shadow-lg uppercase";
+                    }
+                }
+                
+                // Gatilho de Deslizar automático (para barreira suspensa)
+                const highObs = this.simulatedObstacles.find(o => o.type === 'barrier');
+                if (highObs && highObs.x > 50 && highObs.x < 120) {
+                    this.player.isSliding = true;
+                    if (badge) {
+                        badge.innerText = "SETA BAIXO (DESLIZE!)";
+                        badge.className = "absolute top-3 right-3 px-3 py-1 bg-yellow-600 text-white font-mcr-gothic text-xs tracking-wider rounded-lg shadow-lg uppercase";
+                    }
+                } else if (stageTimer > 230 && stageTimer < 240) {
+                    this.player.isSliding = false;
+                }
+
+                if (stageTimer > 240 && stageTimer < 310) {
+                    if (badge) {
+                        badge.innerText = "COLETANDO!";
+                        badge.className = "absolute top-3 right-3 px-3 py-1 bg-green-600 text-white font-mcr-gothic text-xs tracking-wider rounded-lg shadow-lg uppercase";
+                    }
+                } else if (stageTimer >= 310 || stageTimer < 5) {
+                    if (badge) {
+                        badge.innerText = "CORRENDO...";
+                        badge.className = "absolute top-3 right-3 px-3 py-1 bg-zinc-600 text-white font-mcr-gothic text-xs tracking-wider rounded-lg shadow-lg uppercase";
+                    }
+                }
+
+                // Processar Gravidade da Demo
+                if (this.player.isJumping) {
+                    this.player.vy += 0.45;
+                    this.player.y += this.player.vy;
+                    if (this.player.y >= this.player.groundY) {
+                        this.player.y = this.player.groundY;
+                        this.player.isJumping = false;
+                    }
+                }
+
+                // Mover obstáculos e colecionáveis na demo
+                this.simulatedObstacles.forEach(o => o.x -= 4);
+                this.simulatedSkulls.forEach(s => s.x -= 4);
+
+                // Filtrar fora da tela
+                this.simulatedObstacles = this.simulatedObstacles.filter(o => o.x > -50);
+                this.simulatedSkulls = this.simulatedSkulls.filter(s => s.x > -50);
+            },
+            
+            drawSimulation() {
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+                const ctx = this.ctx;
+                
+                ctx.fillStyle = stagesData[gameState.stage].bgColor;
+                ctx.fillRect(0, 0, w, h);
+                
+                // Desenhar Chão
+                ctx.fillStyle = stagesData[gameState.stage].groundColor;
+                ctx.fillRect(0, h - 30, w, 30);
+                
+                // Desenhar Obstáculos Simulados (e buracos apagando o chão)
+                this.simulatedObstacles.forEach(o => {
+                    if (o.type === 'hole') {
+                        ctx.fillStyle = "#000000";
+                        ctx.fillRect(o.x, h - 30, o.width, 30);
+                        ctx.fillStyle = stagesData[gameState.stage].accentColor;
+                        ctx.fillRect(o.x - 2, h - 30, 2, 30);
+                        ctx.fillRect(o.x + o.width, h - 30, 2, 30);
+                    } else {
+                        ctx.fillStyle = "#ff4d4d";
+                        ctx.fillRect(o.x, o.y, o.width, o.height);
+                    }
+                });
+
+                // Desenhar linha de acabamento de chão
+                ctx.fillStyle = stagesData[gameState.stage].accentColor;
+                ctx.fillRect(0, h - 30, w, 3);
+                this.simulatedObstacles.forEach(o => {
+                    if (o.type === 'hole') {
+                        ctx.clearRect(o.x, h - 30, o.width, 3);
+                    }
+                });
+
+                // Desenhar Caveiras Simuladas
+                ctx.fillStyle = "#ffffff";
+                this.simulatedSkulls.forEach(s => {
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, 6, 0, Math.PI*2);
+                    ctx.fill();
+                });
+
+                // Desenhar Chibi Redondinho na Demo
+                ctx.save();
+                let renderY = this.player.y;
+                if (this.player.isSliding) {
+                    renderY += 10;
+                    ctx.translate(this.player.x + 12, renderY + 10);
+                    ctx.rotate(-0.15);
+                } else {
+                    ctx.translate(this.player.x + 12, renderY + 15);
+                }
+                
+                drawChibi(ctx, 0, 0, 11, gameState.character);
+                ctx.restore();
+            }
+        };
+
+        // -------------------------------------------------------------
+        // MOTOR GRÁFICO DO JOGO RUNNER PRINCIPAL
+        // -------------------------------------------------------------
+        const RunnerEngine = {
+            canvas: null,
+            ctx: null,
+            animationFrameId: null,
+            
+            player: {
+                x: 80,
+                y: 200,
+                width: 36,
+                height: 48,
+                vy: 0,
+                gravity: 0.8,
+                jumpPower: -13.5,
+                isJumping: false,
+                isDoubleJumping: false,
+                isSliding: false,
+                slideTime: 0,
+                hasActiveShield: false,
+                shieldAnimationTimer: 0,
+                runningFrame: 0,
+                groundY: 340
+            },
+
+            obstacles: [],
+            skulls: [],
+            particles: [],
+            scrollingBackgrounds: [],
+            
+            nextObstacleDistance: 250,
+            nextSkullDistance: 100,
+            globalSpeed: 2.5,            
+            currentBaseSpeed: 2.5,    // MUDANÇA: Começamos mais devagar (de 4.0 para 2.5)
+            maxBaseSpeed: 9.5,        // Velocidade máxima justa
+            levelUpThreshold: 1000,
+            
+            init(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+            },
+
+            resizeCanvas() {
+                if (!this.canvas) return;
+                const container = document.getElementById('game-container');
+                this.canvas.width = container.clientWidth;
+                this.canvas.height = 400; 
+                this.player.groundY = this.canvas.height - 60;
+            },
+
+            resetGame() {
+                this.player.y = this.player.groundY;
+                this.player.vy = 0;
+                this.player.isJumping = false;
+                this.player.isDoubleJumping = false;
+                this.player.isSliding = false;
+                this.player.hasActiveShield = (gameState.character === 'gerard');
+                
+                gameState.score = 0;
+                gameState.multiplier = 1.0;
+                gameState.energy = 100;
+                gameState.stageDistance = 0;
+                gameState.skullsCount = { sm: 0, md: 0, lg: 0, xl: 0 };
+                
+                this.obstacles = [];
+                this.skulls = [];
+                this.particles = [];
+                
+                this.currentBaseSpeed = 2.5; // MUDANÇA: Reset configurado para a nova velocidade base menor
+                const stageConfig = stagesData[gameState.stage];
+                this.globalSpeed = this.currentBaseSpeed * stageConfig.speedMultiplier;
+                
+                this.nextObstacleDistance = 300;
+                this.nextSkullDistance = 80;
+                
+                const hudCv = document.getElementById("hud-char-avatar");
+                if (hudCv) {
+                    hudCv.width = 40;
+                    hudCv.height = 40;
+                    const ctx = hudCv.getContext('2d');
+                    ctx.clearRect(0, 0, 40, 40);
+                    drawChibi(ctx, 20, 20, 14, gameState.character);
+                }
+                document.getElementById("hud-char-name").innerText = charactersData[gameState.character].name.split(" ")[0];
+                document.getElementById("hud-stage-badge").innerText = stageConfig.name.substring(0, 16) + "...";
+
+                this.updateHUDValues();
+            },
+
+            updateHUDValues() {
+                document.getElementById("hud-score-val").innerText = String(Math.floor(gameState.score)).padStart(5, '0');
+                document.getElementById("hud-mult-val").innerText = `x${gameState.multiplier.toFixed(1)}`;
+                document.getElementById("hud-skulls-total").innerText = 
+                    gameState.skullsCount.sm + gameState.skullsCount.md + gameState.skullsCount.lg + gameState.skullsCount.xl;
+                document.getElementById("hud-energy-bar").style.width = `${gameState.energy}%`;
+
+                const pIndicator = document.getElementById("hud-power-indicator");
+                const pText = document.getElementById("hud-power-text");
+                if (this.player.hasActiveShield) {
+                    pIndicator.classList.remove('hidden');
+                    pIndicator.classList.add('flex');
+                    pText.innerText = "Escudo Gótico Ativo";
+                } else if (gameState.character === 'ray') {
+                    pIndicator.classList.remove('hidden');
+                    pIndicator.classList.add('flex');
+                    pText.innerText = "Imã Musical";
+                } else {
+                    pIndicator.classList.add('hidden');
+                }
+            },
+
+            triggerJump() {
+                if (!this.player.isJumping) {
+                    this.player.vy = this.player.jumpPower;
+                    this.player.isJumping = true;
+                    this.player.isSliding = false;
+                    AudioEngine.playJumpSound();
+                    this.spawnParticles(this.player.x + 10, this.player.y + this.player.height, '#fff', 5);
+                } else if (!this.player.isDoubleJumping) {
+                    this.player.vy = this.player.jumpPower * 0.95;
+                    this.player.isDoubleJumping = true;
+                    AudioEngine.playJumpSound();
+                    this.spawnParticles(this.player.x + 10, this.player.y + this.player.height, '#e50914', 8);
+                }
+            },
+
+            triggerSlide(isActive) {
+                if (this.player.isJumping && isActive) return;
+                this.player.isSliding = isActive;
+                if (isActive) {
+                    this.player.height = 24;
+                } else {
+                    this.player.height = 48;
+                }
+            },
+
+            drawBackgroundParallax() {
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+                const stage = gameState.stage;
+                const dist = gameState.stageDistance;
+
+                this.ctx.fillStyle = stagesData[stage].bgColor;
+                this.ctx.fillRect(0, 0, w, h);
+
+                this.ctx.fillStyle = stagesData[stage].groundColor;
+                this.ctx.globalAlpha = 0.25;
+                const scrollA = (dist * 0.1) % w;
+                
+                this.ctx.beginPath();
+                this.ctx.moveTo(0, h);
+                this.ctx.lineTo(0, h - 120);
+                
+                for (let i = 0; i <= w; i += 40) {
+                    const waveY = h - 130 + Math.sin((i + scrollA) * 0.015) * 30 + Math.cos((i - scrollA) * 0.005) * 15;
+                    this.ctx.lineTo(i, waveY);
+                }
+                this.ctx.lineTo(w, h);
+                this.ctx.closePath();
+                this.ctx.fill();
+
+                this.ctx.globalAlpha = 0.5;
+                const scrollB = (dist * 0.5) % w;
+                
+                if (stage === 'bullets') {
+                    for (let x = 100 - scrollB; x < w + 200; x += 300) {
+                        this.ctx.fillStyle = "#2d1b4e";
+                        this.ctx.fillRect(x, h - 180, 25, 120);
+                        this.ctx.beginPath();
+                        this.ctx.arc(x + 12.5, h - 190, 8, 0, Math.PI * 2);
+                        this.ctx.fillStyle = "#ff7675";
+                        this.ctx.fill();
+                    }
+                } else if (stage === 'threecheers') {
+                    for (let x = 80 - scrollB; x < w + 200; x += 250) {
+                        this.ctx.fillStyle = "#3a0e0e";
+                        this.ctx.fillRect(x, h - 160, 10, 100);
+                        this.ctx.fillRect(x - 12, h - 140, 34, 10);
+                    }
+                } else if (stage === 'blackparade') {
+                    for (let x = 40 - scrollB; x < w + 200; x += 180) {
+                        this.ctx.fillStyle = "#2d2d2d";
+                        this.ctx.fillRect(x, h - 220, 60, 160);
+                        this.ctx.fillStyle = "#111";
+                        this.ctx.fillRect(x + 10, h - 200, 15, 20);
+                        this.ctx.fillRect(x + 35, h - 200, 15, 20);
+                    }
+                } else if (stage === 'dangerdays') {
+                    for (let x = 120 - scrollB; x < w + 200; x += 350) {
+                        this.ctx.fillStyle = "#4a2c06";
+                        this.ctx.fillRect(x, h - 240, 8, 180);
+                        this.ctx.beginPath();
+                        this.ctx.arc(x + 4, h - 240, 14, 0, Math.PI * 2);
+                        this.ctx.fillStyle = "#e58e26";
+                        this.ctx.fill();
+                    }
+                }
+
+                this.ctx.globalAlpha = 1.0;
+                
+                // Desenhar base sólida do chão
+                this.ctx.fillStyle = stagesData[stage].groundColor;
+                this.ctx.fillRect(0, h - 60, w, 60);
+
+                // Desenhar buracos reais que apagam seções de chão
+                for (let i = 0; i < this.obstacles.length; i++) {
+                    const obs = this.obstacles[i];
+                    if (obs.type === 'hole') {
+                        // Desenha fenda profunda (fundo do canvas)
+                        this.ctx.fillStyle = "#000000";
+                        this.ctx.fillRect(obs.x, h - 60, obs.width, 60);
+                        
+                        // Desenha contornos brilhantes nas falésias do buraco
+                        this.ctx.fillStyle = stagesData[stage].accentColor;
+                        this.ctx.fillRect(obs.x - 3, h - 60, 3, 60);
+                        this.ctx.fillRect(obs.x + obs.width, h - 60, 3, 60);
+                    }
+                }
+
+                // Linha decorativa brilhante de acabamento do chão
+                this.ctx.fillStyle = stagesData[stage].accentColor;
+                this.ctx.fillRect(0, h - 60, w, 6);
+
+                // Apaga a linha brilhante decorativa apenas por cima do buraco
+                for (let i = 0; i < this.obstacles.length; i++) {
+                    const obs = this.obstacles[i];
+                    if (obs.type === 'hole') {
+                        this.ctx.clearRect(obs.x - 1, h - 60, obs.width + 2, 6);
+                    }
+                }
+            },
+
+            drawPlayer() {
+                const py = this.player.isSliding ? this.player.y + 16 : this.player.y;
+                const ph = this.player.height;
+                const pw = this.player.width;
+
+                this.ctx.save();
+
+                let rotation = 0;
+                if (this.player.isJumping) {
+                    rotation = Math.sin(Date.now() * 0.015) * 0.15;
+                } else if (this.player.isSliding) {
+                    rotation = -0.15;
+                } else {
+                    this.player.runningFrame += 0.2;
+                    rotation = Math.sin(this.player.runningFrame) * 0.05;
+                }
+
+                this.ctx.translate(this.player.x + pw / 2, py + ph / 2);
+                this.ctx.rotate(rotation);
+
+                const scale = this.player.isSliding ? 0.75 : 1.0;
+                this.ctx.scale(scale, scale);
+
+                // Desenha o novíssimo Chibi Arredondado no centro de gravidade
+                drawChibi(this.ctx, 0, 0, 22, gameState.character);
+
+                this.ctx.restore();
+
+                // Efeito do escudo ativo
+                if (this.player.hasActiveShield) {
+                    this.player.shieldAnimationTimer += 0.05;
+                    const shieldPulse = 1.0 + Math.sin(this.player.shieldAnimationTimer) * 0.08;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.player.x + pw / 2, py + ph / 2, 38 * shieldPulse, 0, Math.PI * 2);
+                    this.ctx.strokeStyle = "rgba(229, 9, 20, 0.6)";
+                    this.ctx.lineWidth = 3;
+                    this.ctx.fillStyle = "rgba(229, 9, 20, 0.08)";
+                    this.ctx.stroke();
+                    this.ctx.fill();
+                }
+
+                if (gameState.character === 'ray') {
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.player.x + pw / 2, py + ph / 2, 100, 0, Math.PI * 2);
+                    this.ctx.strokeStyle = "rgba(255, 159, 67, 0.05)";
+                    this.ctx.lineWidth = 1;
+                    this.ctx.stroke();
+                }
+            },
+
+            spawnParticles(x, y, color, count) {
+                for (let i = 0; i < count; i++) {
+                    this.particles.push({
+                        x: x,
+                        y: y,
+                        vx: (Math.random() - 0.5) * 8,
+                        vy: (Math.random() - 0.5) * 8 - 2,
+                        size: Math.random() * 4 + 2,
+                        color: color,
+                        alpha: 1.0,
+                        decay: Math.random() * 0.03 + 0.02
+                    });
+                }
+            },
+
+            drawAndProcessParticles() {
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const p = this.particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.1;
+                    p.alpha -= p.decay;
+
+                    if (p.alpha <= 0) {
+                        this.particles.splice(i, 1);
+                        continue;
+                    }
+
+                    this.ctx.save();
+                    this.ctx.globalAlpha = p.alpha;
+                    this.ctx.fillStyle = p.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.restore();
+                }
+            },
+
+            getRandomSkullType() {
+                const rand = Math.random() * 100;
+                if (rand > 96) return 'xl';   // Dourada
+                if (rand > 82) return 'lg';   // Ciano
+                if (rand > 50) return 'md';   // Rosa
+                return 'sm';                 // Branca
+            },
+
+            generateSkullsAndObstacles() {
+                this.nextObstacleDistance -= this.globalSpeed;
+                this.nextSkullDistance -= this.globalSpeed;
+
+                // Gerar Obstáculos de formato simples (com maior espaçamento para dar foco às caveiras)
+                if (this.nextObstacleDistance <= 0) {
+                    const obstacleTypes = ['hurdle', 'barrier', 'hole'];
+                    const type = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+                    
+                    let obsY, obsH, obsW = 32;
+                    if (type === 'hurdle') {
+                        // Simples empecilho a ser pulado
+                        obsH = 34;
+                        obsY = this.player.groundY - obsH;
+                    } else if (type === 'barrier') {
+                        // Simples obstáculo aéreo que requer abaixar (slide)
+                        obsH = 30;
+                        obsY = this.player.groundY - 82;
+                    } else if (type === 'hole') {
+                        // Buraco / fenda real
+                        obsH = 60;
+                        obsY = this.player.groundY;
+                        obsW = 54; // Ligeiramente mais largo
+                    }
+
+                    this.obstacles.push({
+                        x: this.canvas.width + 50,
+                        y: obsY,
+                        width: obsW,
+                        height: obsH,
+                        type: type
+                    });
+
+                    // Distâncias generosas para uma jogabilidade fluida e satisfatória de coleta
+                    this.nextObstacleDistance = Math.random() * 320 + 380 - (this.globalSpeed * 5);
+                }
+
+                // Geração de Colecionáveis de Caveiras em Padrões Densos (Cookie Run Style!)
+                if (this.nextSkullDistance <= 0) {
+                    const patterns = ['line', 'arc', 'wave', 'dense-arch'];
+                    const chosenPattern = patterns[Math.floor(Math.random() * patterns.length)];
+                    const startX = this.canvas.width + 60;
+                    
+                    if (chosenPattern === 'line') {
+                        // Linha reta de 4 a 6 caveiras
+                        const count = Math.floor(Math.random() * 3) + 4;
+                        const yLevel = this.player.groundY - (Math.random() > 0.5 ? 25 : 65);
+                        for (let i = 0; i < count; i++) {
+                            this.skulls.push({
+                                x: startX + i * 36,
+                                y: yLevel,
+                                type: this.getRandomSkullType(),
+                                animTimer: i * 0.4
+                            });
+                        }
+                    } else if (chosenPattern === 'arc') {
+                        // Arco de salto perfeito (útil para pular buracos e obstáculos)
+                        const count = 5;
+                        for (let i = 0; i < count; i++) {
+                            const angle = (i / (count - 1)) * Math.PI;
+                            const rx = startX + i * 38;
+                            const ry = this.player.groundY - 35 - Math.sin(angle) * 75;
+                            this.skulls.push({
+                                x: rx,
+                                y: ry,
+                                type: this.getRandomSkullType(),
+                                animTimer: i * 0.4
+                            });
+                        }
+                    } else if (chosenPattern === 'wave') {
+                        // Padrão de onda senoidal de colecionáveis
+                        const count = 6;
+                        for (let i = 0; i < count; i++) {
+                            const rx = startX + i * 36;
+                            const ry = this.player.groundY - 50 + Math.sin(i * 0.9) * 40;
+                            this.skulls.push({
+                                x: rx,
+                                y: ry,
+                                type: this.getRandomSkullType(),
+                                animTimer: i * 0.4
+                            });
+                        }
+                    } else {
+                        // Grade densa dupla (alta pontuação)
+                        const count = 4;
+                        for (let i = 0; i < count; i++) {
+                            this.skulls.push({
+                                x: startX + i * 35,
+                                y: this.player.groundY - 25,
+                                type: this.getRandomSkullType(),
+                                animTimer: i * 0.3
+                            });
+                            this.skulls.push({
+                                x: startX + i * 35,
+                                y: this.player.groundY - 65,
+                                type: this.getRandomSkullType(),
+                                animTimer: i * 0.3 + 0.8
+                            });
+                        }
+                    }
+
+                    // Aguarda a passagem completa do padrão para spawnar outro
+                    this.nextSkullDistance = Math.random() * 120 + 200;
+                }
+            },
+
+            drawObstacles() {
+                const stage = gameState.stage;
+                const accent = stagesData[stage].accentColor;
+
+                for (let i = 0; i < this.obstacles.length; i++) {
+                    const obs = this.obstacles[i];
+                    
+                    // Os buracos (holes) já são apagados de forma visual no drawBackgroundParallax
+                    if (obs.type === 'hole') continue;
+
+                    this.ctx.save();
+                    this.ctx.shadowBlur = 8;
+                    this.ctx.shadowColor = accent;
+
+                    if (obs.type === 'hurdle') {
+                        // Desenhar obstáculo terrestre simples (ex: cones, pedras ou lápides)
+                        this.ctx.fillStyle = "#1e1e1e";
+                        this.ctx.strokeStyle = accent;
+                        this.ctx.lineWidth = 2.5;
+                        
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(obs.x, obs.y + obs.height);
+                        this.ctx.lineTo(obs.x + obs.width / 2, obs.y);
+                        this.ctx.lineTo(obs.x + obs.width, obs.y + obs.height);
+                        this.ctx.closePath();
+                        this.ctx.fill();
+                        this.ctx.stroke();
+
+                        // Detalhe temático na lápide/hurdle
+                        this.ctx.fillStyle = accent;
+                        this.ctx.fillRect(obs.x + obs.width / 2 - 2, obs.y + 10, 4, 14);
+                        this.ctx.fillRect(obs.x + obs.width / 2 - 6, obs.y + 14, 12, 4);
+                    } else if (obs.type === 'barrier') {
+                        // Desenhar obstáculo aéreo simples (sinalizador ou barreira suspensa)
+                        this.ctx.fillStyle = "#111111";
+                        this.ctx.strokeStyle = accent;
+                        this.ctx.lineWidth = 2.5;
+
+                        this.ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                        this.ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
+
+                        // Listras amarelas/vermelhas de aviso de desvio
+                        this.ctx.fillStyle = accent;
+                        this.ctx.fillRect(obs.x + 3, obs.y + 3, 5, obs.height - 6);
+                        this.ctx.fillRect(obs.x + obs.width - 8, obs.y + 3, 5, obs.height - 6);
+                    }
+
+                    this.ctx.restore();
+                }
+            },
+
+            drawSkulls() {
+                for (let i = 0; i < this.skulls.length; i++) {
+                    const skull = this.skulls[i];
+                    skull.animTimer += 0.08;
+                    const floatY = Math.sin(skull.animTimer) * 5;
+
+                    this.ctx.save();
+                    
+                    let color, sizeRadius, outline;
+                    if (skull.type === 'sm') {
+                        color = "#ffffff"; outline = "#777777"; sizeRadius = 8;
+                    } else if (skull.type === 'md') {
+                        color = "#ff4d94"; outline = "#800040"; sizeRadius = 11;
+                    } else if (skull.type === 'lg') {
+                        color = "#2ef5e8"; outline = "#006660"; sizeRadius = 14;
+                    } else {
+                        color = "#ffd700"; outline = "#a67c00"; sizeRadius = 18;
+                    }
+
+                    this.ctx.translate(skull.x, skull.y + floatY);
+
+                    this.ctx.shadowBlur = 10;
+                    this.ctx.shadowColor = color;
+
+                    this.ctx.fillStyle = color;
+                    this.ctx.strokeStyle = outline;
+                    this.ctx.lineWidth = 2;
+
+                    this.ctx.beginPath();
+                    this.ctx.arc(0, -sizeRadius * 0.2, sizeRadius, Math.PI, 0);
+                    this.ctx.lineTo(sizeRadius * 0.6, sizeRadius * 0.7);
+                    this.ctx.lineTo(sizeRadius * 0.3, sizeRadius * 0.7);
+                    this.ctx.lineTo(sizeRadius * 0.2, sizeRadius * 0.9);
+                    this.ctx.lineTo(0, sizeRadius * 0.7);
+                    this.ctx.lineTo(-sizeRadius * 0.2, sizeRadius * 0.9);
+                    this.ctx.lineTo(-sizeRadius * 0.3, sizeRadius * 0.7);
+                    this.ctx.lineTo(-sizeRadius * 0.6, sizeRadius * 0.7);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+                    this.ctx.stroke();
+
+                    this.ctx.fillStyle = "#111111";
+                    const eyeSpacing = sizeRadius * 0.35;
+                    const eyeSize = sizeRadius * 0.25;
+                    
+                    this.ctx.beginPath();
+                    this.ctx.arc(-eyeSpacing, -sizeRadius * 0.1, eyeSize, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    this.ctx.beginPath();
+                    this.ctx.arc(eyeSpacing, -sizeRadius * 0.1, eyeSize, 0, Math.PI * 2);
+                    this.ctx.fill();
+
+                    if (skull.type === 'md' || skull.type === 'xl') {
+                        this.ctx.fillStyle = "#e50914";
+                        this.ctx.beginPath();
+                        this.ctx.arc(-sizeRadius * 0.5, -sizeRadius * 0.8, sizeRadius * 0.2, 0, Math.PI * 2);
+                        this.ctx.arc(-sizeRadius * 0.8, -sizeRadius * 0.5, sizeRadius * 0.2, 0, Math.PI * 2);
+                        this.ctx.fill();
+                    }
+
+                    this.ctx.restore();
+                }
+            },
+
+            processMovementAndCollisions() {
+                const py = this.player.isSliding ? this.player.y + 16 : this.player.y;
+                const ph = this.player.height;
+                const pw = this.player.width;
+
+                // Verificação de queda no Buraco (Hole detection)
+                let isOverHole = false;
+                for (let i = 0; i < this.obstacles.length; i++) {
+                    const obs = this.obstacles[i];
+                    if (obs.type === 'hole') {
+                        // Verifica se o pé ou centro do Chibi está sobrevoando o buraco
+                        const pxCenter = this.player.x + pw / 2;
+                        if (pxCenter > obs.x && pxCenter < obs.x + obs.width) {
+                            isOverHole = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (this.player.isJumping) {
+                    this.player.vy += this.player.gravity;
+                    this.player.y += this.player.vy;
+
+                    if (this.player.y >= this.player.groundY) {
+                        if (isOverHole) {
+                            // Se estiver acima do buraco, ele passa direto do chão e cai
+                            if (this.player.y > this.canvas.height + 15) {
+                                this.triggerHoleFallPenalty();
+                            }
+                        } else {
+                            this.player.y = this.player.groundY;
+                            this.player.vy = 0;
+                            this.player.isJumping = false;
+                            this.player.isDoubleJumping = false;
+                        }
+                    }
+                } else {
+                    // Se não estiver pulando e de repente passar sobre o buraco, cai
+                    if (isOverHole) {
+                        this.player.isJumping = true;
+                        this.player.vy = 2.5; // Começa a cair de forma acelerada
+                    }
+                }
+
+                // Aceleração progressiva no tempo de corrida
+                this.currentBaseSpeed += 0.0003; // MUDANÇA: Reduzido de 0.0006 para um aumento muito mais gradual
+                if (this.currentBaseSpeed > this.maxBaseSpeed) {
+                    this.currentBaseSpeed = this.maxBaseSpeed;
+                }
+
+                const stageConfig = stagesData[gameState.stage];
+                if (gameState.character === 'frank' && this.player.isSliding) {
+                    this.player.slideTime += 0.05;
+                    if (this.player.slideTime > 1.2) {
+                        this.globalSpeed = (this.currentBaseSpeed * stageConfig.speedMultiplier) * 1.4;
+                        this.spawnParticles(this.player.x, this.player.y + this.player.height, '#10ac84', 2);
+                    }
+                } else {
+                    if (gameState.character === 'frank') this.player.slideTime = 0;
+                    this.globalSpeed = this.currentBaseSpeed * stageConfig.speedMultiplier;
+                }
+
+                for (let i = this.obstacles.length - 1; i >= 0; i--) {
+                    const obs = this.obstacles[i];
+                    obs.x -= this.globalSpeed;
+
+                    if (obs.x < -100) {
+                        this.obstacles.splice(i, 1);
+                        gameState.score += 20 * gameState.multiplier;
+                        continue;
+                    }
+
+                    // Buracos têm física tratada acima separadamente
+                    if (obs.type === 'hole') continue;
+
+                    if (
+                        this.player.x < obs.x + obs.width &&
+                        this.player.x + pw > obs.x &&
+                        py < obs.y + obs.height &&
+                        py + ph > obs.y
+                    ) {
+                        this.obstacles.splice(i, 1);
+                        
+                        if (this.player.hasActiveShield) {
+                            this.player.hasActiveShield = false;
+                            this.updateHUDValues();
+                            AudioEngine.playHitSound();
+                            this.spawnParticles(this.player.x + 20, this.player.y + 20, '#ffffff', 20);
+                        } else {
+                            gameState.energy -= 25;
+                            AudioEngine.playHitSound();
+                            this.spawnParticles(this.player.x + 20, this.player.y + 20, '#ff4d4d', 15);
+                            
+                            document.getElementById('game-container').classList.add('animate-bounce');
+                            setTimeout(() => {
+                                document.getElementById('game-container').classList.remove('animate-bounce');
+                            }, 300);
+
+                            if (gameState.energy <= 0) {
+                                gameState.energy = 0;
+                                this.triggerGameOver();
+                            }
+                            this.updateHUDValues();
+                        }
+                    }
+                }
+
+                for (let i = this.skulls.length - 1; i >= 0; i--) {
+                    const skull = this.skulls[i];
+                    
+                    if (gameState.character === 'ray') {
+                        const dx = skull.x - (this.player.x + pw / 2);
+                        const dy = skull.y - (py + ph / 2);
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 120) {
+                            skull.x -= (dx / dist) * 8;
+                            skull.y -= (dy / dist) * 8;
+                        }
+                    }
+
+                    skull.x -= this.globalSpeed;
+
+                    if (skull.x < -100) {
+                        this.skulls.splice(i, 1);
+                        continue;
+                    }
+
+                    const dx = skull.x - (this.player.x + pw / 2);
+                    const dy = skull.y - (py + ph / 2);
+                    const collisionDist = 26;
+
+                    if (Math.sqrt(dx * dx + dy * dy) < collisionDist) {
+                        this.skulls.splice(i, 1);
+                        
+                        let pointsGained = 10;
+                        let particleColor = "#ffffff";
+                        
+                        if (skull.type === 'sm') {
+                            pointsGained = 10;
+                            gameState.skullsCount.sm++;
+                        } else if (skull.type === 'md') {
+                            pointsGained = 50;
+                            gameState.skullsCount.md++;
+                            particleColor = "#ff4d94";
+                        } else if (skull.type === 'lg') {
+                            pointsGained = 100;
+                            gameState.skullsCount.lg++;
+                            particleColor = "#2ef5e8";
+                        } else if (skull.type === 'xl') {
+                            pointsGained = 500;
+                            gameState.skullsCount.xl++;
+                            particleColor = "#ffd700";
+                        }
+
+                        if (gameState.character === 'mikey' && (skull.type === 'md' || skull.type === 'lg')) {
+                            pointsGained *= 2;
+                        }
+
+                        gameState.score += pointsGained * gameState.multiplier;
+                        gameState.energy = Math.min(100, gameState.energy + (pointsGained * 0.02));
+
+                        this.spawnParticles(skull.x, skull.y, particleColor, 8);
+                        AudioEngine.playCollectSound(skull.type);
+                        
+                        const totalColetas = gameState.skullsCount.sm + gameState.skullsCount.md + gameState.skullsCount.lg + gameState.skullsCount.xl;
+                        if (totalColetas % 10 === 0) {
+                            gameState.multiplier += 0.1;
+                        }
+
+                        this.updateHUDValues();
+                    }
+                }
+
+                gameState.energy -= 0.05; 
+                gameState.stageDistance += this.globalSpeed * 0.05;
+
+                if (gameState.energy <= 0) {
+                    gameState.energy = 0;
+                    this.updateHUDValues();
+                    this.triggerGameOver();
+                } else {
+                    this.updateHUDValues();
+                }
+            },
+
+            triggerHoleFallPenalty() {
+                if (this.player.hasActiveShield) {
+                    this.player.hasActiveShield = false;
+                    this.updateHUDValues();
+                    AudioEngine.playHitSound();
+                    this.spawnParticles(this.player.x + 20, this.player.groundY, '#ffffff', 25);
+                } else {
+                    gameState.energy -= 20; // Penalidade menor para manter corrida satisfatória
+                    AudioEngine.playHitSound();
+                    this.spawnParticles(this.player.x + 20, this.player.groundY, '#ff4d4d', 20);
+
+                    document.getElementById('game-container').classList.add('animate-bounce');
+                    setTimeout(() => {
+                        document.getElementById('game-container').classList.remove('animate-bounce');
+                    }, 300);
+
+                    if (gameState.energy <= 0) {
+                        gameState.energy = 0;
+                        this.updateHUDValues();
+                        this.triggerGameOver();
+                        return;
+                    }
+                    this.updateHUDValues();
+                }
+                
+                // Mola elástica de resgate: ejeta o Chibi de volta ao jogo!
+                this.player.y = this.player.groundY - 90;
+                this.player.vy = -8.5; 
+                this.player.isJumping = true;
+                this.player.isDoubleJumping = false;
+            },
+
+            update() {
+                if (gameState.isPaused || gameState.currentScreen !== 'gameplay') return;
+
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                this.drawBackgroundParallax();
+                this.processMovementAndCollisions();
+                this.generateSkullsAndObstacles();
+
+                this.drawObstacles();
+                this.drawSkulls();
+                this.drawPlayer();
+                this.drawAndProcessParticles();
+
+                this.animationFrameId = requestAnimationFrame(() => this.update());
+            },
+
+            triggerGameOver() {
+                this.stopEngine();
+                AudioEngine.stopSong();
+                
+                if (gameState.score > gameState.highScore) {
+                    gameState.highScore = Math.floor(gameState.score);
+                    localStorage.setItem('mcr_high_score', gameState.highScore);
+                }
+
+                navigateToScreen('gameover');
+                
+                document.getElementById("go-score").innerText = String(Math.floor(gameState.score)).padStart(5, '0');
+                document.getElementById("go-high-score").innerText = String(Math.floor(gameState.highScore)).padStart(5, '0');
+                
+                document.getElementById("go-skull-sm").innerText = gameState.skullsCount.sm;
+                document.getElementById("go-skull-md").innerText = gameState.skullsCount.md;
+                document.getElementById("go-skull-lg").innerText = gameState.skullsCount.lg;
+                document.getElementById("go-skull-xl").innerText = gameState.skullsCount.xl;
+
+                const quotes = [
+                    '"So long and goodnight..."',
+                    '"We will carry on!"',
+                    '"Look alive, sunshine!"',
+                    '"I am not afraid to keep on living!"'
+                ];
+                let selectedQuote = quotes[0];
+                if (gameState.score > 10000) selectedQuote = quotes[3];
+                else if (gameState.score > 5000) selectedQuote = quotes[1];
+                else if (gameState.score > 2000) selectedQuote = quotes[2];
+                
+                document.getElementById("go-quote").innerText = selectedQuote;
+            },
+
+            stopEngine() {
+                if (this.animationFrameId) {
+                    cancelAnimationFrame(this.animationFrameId);
+                    this.animationFrameId = null;
+                }
+            }
+        };
+
+        // -------------------------------------------------------------
+        // SISTEMA DE CONTROLE DE TELAS (STATE ROUTER)
+        // -------------------------------------------------------------
+        const screens = {
+            menu: document.getElementById('menu-screen'),
+            selection: document.getElementById('selection-screen'),
+            tutorial: document.getElementById('tutorial-screen'),
+            gameplay: document.getElementById('gameplay-screen'),
+            pause: document.getElementById('pause-screen'),
+            gameover: document.getElementById('gameover-screen')
+        };
+
+        function navigateToScreen(target) {
+            Object.keys(screens).forEach(key => {
+                screens[key].classList.add('hidden');
+            });
+
+            if (target === 'pause') {
+                screens.gameplay.classList.remove('hidden');
+                screens.pause.classList.remove('hidden');
+            } else {
+                screens[target].classList.remove('hidden');
+            }
+
+            gameState.currentScreen = target;
+        }
+
+        // -------------------------------------------------------------
+        // CAPTURA DE INPUTS E EVENTOS (TECLADO / TOUCH)
+        // -------------------------------------------------------------
+        function registerInputs() {
+            window.addEventListener('keydown', (e) => {
+                if (gameState.currentScreen !== 'gameplay') return;
+
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    RunnerEngine.triggerJump();
+                }
+                if (e.code === 'ArrowDown') {
+                    e.preventDefault();
+                    RunnerEngine.triggerSlide(true);
+                }
+            });
+
+            window.addEventListener('keyup', (e) => {
+                if (gameState.currentScreen !== 'gameplay') return;
+
+                if (e.code === 'ArrowDown') {
+                    e.preventDefault();
+                    RunnerEngine.triggerSlide(false);
+                }
+            });
+
+            const jumpBtn = document.getElementById('touch-jump-btn');
+            const slideBtn = document.getElementById('touch-slide-btn');
+
+            jumpBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                RunnerEngine.triggerJump();
+            });
+
+            slideBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                RunnerEngine.triggerSlide(true);
+            });
+
+            slideBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                RunnerEngine.triggerSlide(false);
+            });
+
+            jumpBtn.addEventListener('mousedown', () => RunnerEngine.triggerJump());
+            slideBtn.addEventListener('mousedown', () => RunnerEngine.triggerSlide(true));
+            slideBtn.addEventListener('mouseup', () => RunnerEngine.triggerSlide(false));
+            slideBtn.addEventListener('mouseleave', () => RunnerEngine.triggerSlide(false));
+        }
+
+        // -------------------------------------------------------------
+        // REGISTRO DE EVENTOS DOS BOTÕES DA UI
+        // -------------------------------------------------------------
+        function registerUIButtons() {
+            document.getElementById('g-note-btn').addEventListener('click', () => {
+                AudioEngine.playGNote();
+            });
+
+            document.getElementById('start-game-btn').addEventListener('click', () => {
+                AudioEngine.init();
+                navigateToScreen('selection');
+                initUIPreviews();
+            });
+
+            document.getElementById('back-to-menu-btn').addEventListener('click', () => {
+                navigateToScreen('menu');
+            });
+
+            document.querySelectorAll('.char-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    gameState.character = card.getAttribute('data-char');
+                    updateDetailPanel();
+                });
+            });
+
+            document.querySelectorAll('.stage-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    gameState.stage = card.getAttribute('data-stage');
+                    updateStageSelection();
+                });
+            });
+
+            // Botão "PROSSEGUIR" da seleção de personagens -> Vai para o Tutorial & Demo
+            document.getElementById('launch-run-btn').addEventListener('click', () => {
+                navigateToScreen('tutorial');
+                TutorialDemoEngine.init();
+                TutorialDemoEngine.start();
+            });
+
+            // Botão de voltar do Tutorial para a Seleção de banda
+            document.getElementById('back-to-select-btn').addEventListener('click', () => {
+                TutorialDemoEngine.stop();
+                navigateToScreen('selection');
+            });
+
+            // Botão "COMEÇAR O SHOW" (Início real do gameplay)
+            document.getElementById('start-actual-run-btn').addEventListener('click', () => {
+                TutorialDemoEngine.stop();
+                navigateToScreen('gameplay');
+                gameState.isPaused = false;
+                
+                RunnerEngine.resetGame();
+                RunnerEngine.update();
+                
+                AudioEngine.playSong(gameState.stage);
+            });
+
+            const muteBtn = document.getElementById('global-mute-btn');
+            muteBtn.addEventListener('click', () => {
+                gameState.isMuted = !gameState.isMuted;
+                AudioEngine.setMute(gameState.isMuted);
+                
+                const icon = document.getElementById('mute-icon');
+                if (gameState.isMuted) {
+                    icon.className = "fas fa-volume-mute text-red-500";
+                    muteBtn.classList.add('border-red-950/40');
+                } else {
+                    icon.className = "fas fa-volume-up text-zinc-300";
+                    muteBtn.classList.remove('border-red-950/40');
+                }
+            });
+
+            document.getElementById('pause-btn').addEventListener('click', () => {
+                gameState.isPaused = true;
+                navigateToScreen('pause');
+                AudioEngine.stopSong();
+            });
+
+            document.getElementById('resume-game-btn').addEventListener('click', () => {
+                gameState.isPaused = false;
+                navigateToScreen('gameplay');
+                RunnerEngine.update();
+                AudioEngine.playSong(gameState.stage);
+            });
+
+            document.getElementById('abort-run-btn').addEventListener('click', () => {
+                RunnerEngine.stopEngine();
+                AudioEngine.stopSong();
+                navigateToScreen('selection');
+                updateDetailPanel();
+                updateStageSelection();
+            });
+
+            document.getElementById('go-retry-btn').addEventListener('click', () => {
+                navigateToScreen('gameplay');
+                gameState.isPaused = false;
+                RunnerEngine.resetGame();
+                RunnerEngine.update();
+                AudioEngine.playSong(gameState.stage);
+            });
+
+            document.getElementById('go-menu-btn').addEventListener('click', () => {
+                navigateToScreen('menu');
+            });
+        }
+
+        // -------------------------------------------------------------
+        // INICIALIZAÇÃO INICIAL DO SISTEMA
+        // -------------------------------------------------------------
+        window.onload = function () {
+            RunnerEngine.init('game-canvas');
+            registerInputs();
+            registerUIButtons();
+            
+            updateDetailPanel();
+            updateStageSelection();
+        };
+
+    </script>
+</body>
+</html>
